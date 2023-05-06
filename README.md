@@ -1,4 +1,4 @@
-# GreenThumbs
+# GreenThumbs:A Comprehensive Guide to Caring for Your Houseplants
 
 A house plants care guide may cover a wide range of topics related to the care and maintenance of house plants, including information on watering, fertilizing, pruning, and reporting it may also provide tips on choosing the right plant for a specific location and caring for specific types of house plants, such as succulents, cact, and tropical plants. 
 
