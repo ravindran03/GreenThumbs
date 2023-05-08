@@ -11,7 +11,7 @@ def home():
     return render_template('homepage.html')
 
 @app.route('/register' , methods=["GET","POST"])
-def register():
+def register(msg=""):
     if request.method == 'POST':        
         user=request.form['username']
         emailid=request.form['email']
@@ -25,7 +25,8 @@ def register():
         ibm_db.execute(stmt) 
         details=ibm_db.fetch_assoc(stmt)               
         if details:
-            print("username already exists")
+            msg="username already exists,try another"
+            
         else :
             query= "select * from registeration where emailid= ?"         
             stmt = ibm_db.prepare(conn,query)
@@ -33,7 +34,8 @@ def register():
             ibm_db.execute(stmt) 
             details=ibm_db.fetch_assoc(stmt)               
             if details:
-                print("emailid have already been used")
+                msg="emailid have already been used,please log in"                
+                
             else :
                 query="insert into registeration values(?,?,?)"
                 stmt = ibm_db.prepare(conn,query)                                
@@ -41,13 +43,14 @@ def register():
                 ibm_db.bind_param(stmt,2,emailid)
                 ibm_db.bind_param(stmt,3,password)
                 ibm_db.execute(stmt)
+                
                 return redirect('/login')   
-    return render_template('register.html')
+    return render_template('register.html',msg=msg)
 
 
 
 @app.route('/login' , methods=["GET","POST"])
-def login():
+def login(msg=""):
     if request.method == 'POST':
         user = request.form['user_name']
         pw=request.form["pass_word"]
@@ -61,17 +64,19 @@ def login():
         ibm_db.execute(stmt)
         details=ibm_db.fetch_assoc(stmt)
         if details:
+            msg="welcome  "+user
             return redirect('/')
         else:
-            print("username doesn't exist,please login")
-            return redirect('/login')
-    return render_template("login.html")
+            msg="username doesn't exist,please register first"
+            
+    return render_template("login.html",msg=msg)
 
 
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html')
+    
+    return render_template('profile.html',msg="login to view profile")
 
 if __name__ == "__main__" :
     app.run(debug = True)
