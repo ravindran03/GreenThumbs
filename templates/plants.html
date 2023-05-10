@@ -21,33 +21,27 @@
                     
                         <li class="nav-item">
                             <a class="nav-link" href="/">HOME</a>
-                        </li>           {%if visibility=='visible'%} 
-                        <li class="nav-item" style="visibility: {{visibility}};">
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="/register">REGISTER</a>
                         </li>
-                        <li class="nav-item" style="visibility: {{visibility}};">
-                            <a class="nav-link" href="/login">LOGIN</a>
-                        </li>   {%endif%}
                         <li class="nav-item">
-                            <a class="nav-link" href="">GUIDES</a>
+                            <a class="nav-link" href="/login">LOGIN</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/plants">PLANTS</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="">SHOP</a>
-                        </li>                        
-                        <li class="nav-item">
-                            <a class="nav-link" href="/profile"><img style="width: 8%;" src="{{url_for('static',filename='img/profile.png')}}">{{user}}</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="/logout">LOGOUT</a>
-                      </li>
+                            <a class="nav-link" href="/profile"><img style="width: 8%;" src="{{url_for('static',filename='img/profile.png')}}">PROFILE</a>
+                        </li>
                     </ul>               
                 </div>                
         </nav>
     </div>
-    </div>
-    <div class="variable">
-        <h2>{{msg}}</h2>
-    </div>
+    </div><h2>{{msg}}</h2>
 
 </body>
 </html>

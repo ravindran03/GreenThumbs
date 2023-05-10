@@ -1,14 +1,17 @@
-from flask import Flask,render_template,request,redirect
+from flask import Flask,render_template,request,redirect,session,flash
 import ibm_db
 
 conn =  ibm_db.connect("database = bludb; hostname = 125f9f61-9715-46f9-9399-c8177b21803b.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud; port = 30426; uid = ksy13207; password = Z5tm8KPtdC4hpoaL; security = SSL; sslcertificate = DigiCertGlobalRootCA.crt", " ", " ")
 print("connection done")
 
 app=Flask(__name__)
+app.secret_key = "forreal"
 
-@app.route('/' , methods=["GET","POST"])
+@app.route('/')
 def home():
     return render_template('homepage.html')
+
+
 
 @app.route('/register' , methods=["GET","POST"])
 def register(msg=""):
@@ -65,18 +68,37 @@ def login(msg=""):
         details=ibm_db.fetch_assoc(stmt)
         if details:
             msg="welcome  "+user
-            return redirect('/')
+            session['user']=details['USERNAME']
+            return redirect(('/'))
         else:
-            msg="username doesn't exist,please register first"
-            
+            query="select * from registeration where username= ? "
+            stmt=ibm_db.prepare(conn,query)
+            ibm_db.bind_param(stmt,1,user)           
+            ibm_db.execute(stmt)
+            details=ibm_db.fetch_assoc(stmt)
+            if details:
+                msg="username and password didn't match"
+            else:
+               msg="username doesn't exist,please register first"            
     return render_template("login.html",msg=msg)
 
 
 
 @app.route('/profile')
 def profile():
+    if session['user']:
+        msg="welcome"+session['user']
+        return render_template('profile.html',user=session['user'],msg=msg,visibility='hidden')
+    else:
+        return render_template('profile.html',msg="login to view your profile")
     
-    return render_template('profile.html',msg="login to view profile")
+    
+@app.route('/logout')
+def logout():
+    session.pop('user',None)
+    # flash="logged out successfully"
+    return redirect('/')
+
 
 if __name__ == "__main__" :
     app.run(debug = True)

@@ -1,0 +1,55 @@
+#navbar{
+    background-color: rgb(211, 211, 211,0.2);
+    border-bottom-right-radius: 15px   ;
+    border-bottom-left-radius: 15px;
+}
+#navbar:hover{
+    background-color: rgb(211, 211, 211,0.3);
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    box-shadow: 3px 8px 10px 4px rgba(0, 0, 0, 0.1);
+}
+.container a{
+    font-weight: bolder;
+    
+}
+#panel{
+    top: 200px;
+    right: 150px; 
+    position: absolute; 
+    text-align: center;
+    background-color: rgb(211, 211, 211, 0.2); 
+    border-radius: 15px ;
+}
+#panel:hover{
+    top: 200px;
+    right: 150px; 
+    position: absolute; 
+    text-align: center;
+    background-color: rgb(211, 211, 211, 0.3); 
+    box-shadow: 3px 8px 18px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 15px ;
+}
+.new{
+    font-weight: bold;
+    font-style: italic;
+     
+}
+.new a{
+    color: rgb(0, 0, 0);
+    background-color: #505797;
+    padding: 10px 20px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 50px;
+    text-decoration: none;
+}
+.new a:hover{
+    background-color: #505797;
+    font-size: 105%;
+    box-shadow: 2px 8px 16px 0 rgba(0,0,0,0.2);
+}
+.variable{
+    position: absolute;
+    color: rgb(53, 168, 0);
+}
