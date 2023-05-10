@@ -43,7 +43,7 @@ def register(msg=""):
                 ibm_db.bind_param(stmt,2,emailid)
                 ibm_db.bind_param(stmt,3,password)
                 ibm_db.execute(stmt)
-                
+                msg="account registration succesfull,login to website"
                 return redirect('/login')   
     return render_template('register.html',msg=msg)
 
