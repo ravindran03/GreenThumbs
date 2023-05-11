@@ -41,7 +41,25 @@
                 </div>                
         </nav>
     </div>
-    </div><h2>{{msg}}</h2>
+    </div>
+    <div id="panel">
+        <div >
+            <div class="new" >    
+                <h1>care guide</h1>
+                <p>knowing how much you guys love plants too <br> we decided to put together a plant guide , something for you</p>
+                <form action="/guides" method="post">      
+                    <select name="pname" id="pname">   {%for plant in plist%}
+                        <option value={{plant}}>{{plant}}</option>   {%endfor%}
+                        <!-- <option value="plant1">plant2</option>
+                        <option value="plant1">plant3</option>
+                        <option value="plant1">plant4</option>
+                        <option value="plant1">plant5</option> -->
+                    </select>
+                    <input type="submit" value="explore more" class="btn btn-primary">
+                </form>
+            </div>
+        </div>                    
+    </div> 
 
 </body>
 </html>

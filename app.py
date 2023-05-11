@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request,redirect,session,flash
+from flask import Flask,render_template,request,redirect,session,url_for
 import ibm_db
 
 conn =  ibm_db.connect("database = bludb; hostname = 125f9f61-9715-46f9-9399-c8177b21803b.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud; port = 30426; uid = ksy13207; password = Z5tm8KPtdC4hpoaL; security = SSL; sslcertificate = DigiCertGlobalRootCA.crt", " ", " ")
@@ -10,7 +10,6 @@ app.secret_key = "forreal"
 @app.route('/')
 def home():
     return render_template('homepage.html')
-
 
 
 @app.route('/register' , methods=["GET","POST"])
@@ -83,7 +82,6 @@ def login(msg=""):
     return render_template("login.html",msg=msg)
 
 
-
 @app.route('/profile')
 def profile():
     if session['user']:
@@ -92,12 +90,49 @@ def profile():
     else:
         return render_template('profile.html',msg="login to view your profile")
     
-    
+@app.route('/guides',methods=['GET','POST'])
+def guides():
+    if request.method=='POST':
+        pname=request.form['pname']
+        return redirect(url_for('aboutplant',pname=pname))
+    plist=['sunfloer','jasmine','rose','lily'] #build a query to fecth tjhe list of plants we have in database name guide
+    return render_template("guides.html",plist=plist)
+
+@app.route('/plants',methods=['GET','POST'])
+def plants():
+    if request.method=='POST':
+        pname=request.form['pname']
+        pid=request.form['pid']
+        price=request.form['price']
+        query="insert into plant values(?,?,?)"
+        stmt=ibm_db.prepare(conn,query)
+        ibm_db.bind_param(stmt,1,pname)
+        ibm_db.bind_param(stmt,2,pid)
+        ibm_db.bind_param(stmt,3,price)
+        ibm_db.execute(stmt)
+        msg="new plant added succesfully"
+        return msg
+        
+
+
+
+
+
+
+    return render_template("plants.html")
+
 @app.route('/logout')
 def logout():
     session.pop('user',None)
     # flash="logged out successfully"
     return redirect('/')
+
+@app.route('/guides/<pname>')
+def aboutplant(pname):
+    return pname #pass this value in to a query state ment and return the description or properties table name guide
+
+
+#we still have to work on shop to display the plants for buying p.s=tablename =plant
 
 
 if __name__ == "__main__" :

@@ -1,10 +1,16 @@
+#image{
+    object-fit: fill; 
+    width: 100%; 
+    height: 100%; 
+    position: absolute;
+}
 #navbar{
-    background-color: rgb(211, 211, 211,0.2);
+    background-color: rgb(80, 87, 151, 0.2);
     border-bottom-right-radius: 15px   ;
     border-bottom-left-radius: 15px;
 }
 #navbar:hover{
-    background-color: rgb(211, 211, 211,0.3);
+    background-color: rgb(80, 87, 151, 0.3);
     border-bottom-right-radius: 15px;
     border-bottom-left-radius: 15px;
     box-shadow: 3px 8px 10px 4px rgba(0, 0, 0, 0.1);
@@ -18,7 +24,7 @@
     right: 150px; 
     position: absolute; 
     text-align: center;
-    background-color: rgb(211, 211, 211, 0.2); 
+    background-color: rgb(80, 87, 151, 0.2); 
     border-radius: 15px ;
 }
 #panel:hover{
@@ -26,8 +32,8 @@
     right: 150px; 
     position: absolute; 
     text-align: center;
-    background-color: rgb(211, 211, 211, 0.3); 
-    box-shadow: 3px 8px 18px 4px rgba(0, 0, 0, 0.2);
+    background-color: rgb(80, 87, 151, 0.3); 
+    box-shadow: 3px 8px 18px 2px rgba(0, 0, 0, 0.2);
     border-radius: 15px ;
 }
 .new{
@@ -53,3 +59,4 @@
     position: absolute;
     color: rgb(53, 168, 0);
 }
+
