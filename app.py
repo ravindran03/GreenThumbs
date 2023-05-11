@@ -68,7 +68,7 @@ def login(msg=""):
         if details:
             msg="welcome  "+user
             session['user']=details['USERNAME']
-            return redirect(('/'))
+            return redirect('/')
         else:
             query="select * from registeration where username= ? "
             stmt=ibm_db.prepare(conn,query)
@@ -95,7 +95,19 @@ def guides():
     if request.method=='POST':
         pname=request.form['pname']
         return redirect(url_for('aboutplant',pname=pname))
-    plist=['sunfloer','jasmine','rose','lily'] #build a query to fecth tjhe list of plants we have in database name guide
+    
+    plist=[]
+    query="select pname from plant"     #guide table
+    stmt=ibm_db.prepare(conn,query)
+    ibm_db.execute(stmt)
+    pnames=ibm_db.fetch_tuple(stmt)
+    while pnames:
+        plist.append(pnames[0])
+        pnames=ibm_db.fetch_tuple(stmt)
+        
+    print(plist)
+
+    
     return render_template("guides.html",plist=plist)
 
 @app.route('/plants',methods=['GET','POST'])
@@ -129,7 +141,13 @@ def logout():
 
 @app.route('/guides/<pname>')
 def aboutplant(pname):
-    return pname #pass this value in to a query state ment and return the description or properties table name guide
+    query="select * from guide where pname=?"
+    stmt=ibm_db.prepare(conn,query)
+    ibm_db.bind_param(stmt,1,pname)
+    ibm_db.execute(stmt)
+    details=ibm_db.fetch_assoc(stmt)
+    print(type(details))
+    return str(details)
 
 
 #we still have to work on shop to display the plants for buying p.s=tablename =plant
