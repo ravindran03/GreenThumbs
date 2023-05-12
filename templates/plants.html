@@ -45,15 +45,15 @@
     <div id="panel" style="background-color: rgb(80, 87, 151, 0.2);">
         <div >
             <div class="new" >    
-                <form action="/plants" method="post">
+                <form action="/plants" method="post" enctype="multipart/form-data">
                     <label for="pname">Plant name</label> <br>
                     <input type="text" name="pname" id="pname" required> <br>
                     <label for="pid">Plant ID</label> <br>
                     <input type="text" name="pid" id="pid" required> <br>
                     <label for="price">Price</label> <br>
                     <input type="text" name="price" id="price" required> <br>
-                    <!-- <label for="pimage">Plant Image</label> <br>
-                    <input type="file" name="pimage" id="pimage" > <br>                     -->
+                    <label for="pimage">Plant Image</label> <br>
+                    <input type="file" name="pimage" id="pimage" required> <br>                    
                     <input type="submit" value="Add Plant" class="btn btn-primary"> <br>
                 </form>    
             </div>

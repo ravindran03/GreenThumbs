@@ -1,5 +1,8 @@
 from flask import Flask,render_template,request,redirect,session,url_for
 import ibm_db
+import ibm_boto3
+from ibm_botocore.client import ClientError,Config
+
 
 conn =  ibm_db.connect("database = bludb; hostname = 125f9f61-9715-46f9-9399-c8177b21803b.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud; port = 30426; uid = ksy13207; password = Z5tm8KPtdC4hpoaL; security = SSL; sslcertificate = DigiCertGlobalRootCA.crt", " ", " ")
 print("connection done")
@@ -116,22 +119,39 @@ def plants():
         pname=request.form['pname']
         pid=request.form['pid']
         price=request.form['price']
-        query="insert into plant values(?,?,?)"
-        stmt=ibm_db.prepare(conn,query)
-        ibm_db.bind_param(stmt,1,pname)
-        ibm_db.bind_param(stmt,2,pid)
-        ibm_db.bind_param(stmt,3,price)
-        ibm_db.execute(stmt)
-        msg="new plant added succesfully"
-        return msg
+        pimage=request.files['pimage']
+        filename=pimage.filename
+        result=cosupload(pimage)
+        # pimage.save(iname) #used to save the object locally
         
-
-
-
-
-
-
+        
+        if result:
+            query="insert into plant values(?,?,?,?)"
+            stmt=ibm_db.prepare(conn,query)
+            ibm_db.bind_param(stmt,1,pname)
+            ibm_db.bind_param(stmt,2,pid)
+            ibm_db.bind_param(stmt,3,price)
+            ibm_db.bind_param(stmt,4,filename)
+            
+            print(type(pname))
+            ibm_db.execute(stmt)
+        
+            msg="new plant added succesfully"
+            return msg
     return render_template("plants.html")
+
+
+#cloud object storage
+def cosupload(image):    
+    COS_ENDPOINT = "https://s3.us-south.cloud-object-storage.appdomain.cloud"
+    COS_API_KEY_ID = "t6P4mXYo0f_17TLletzv35JHnKmziHnzL7NNo57ARTbi"
+    COS_INSTANCE_CRN = "crn:v1:bluemix:public:cloud-object-storage:global:a/22999e2d442a4ba698829ce83834117e:79083486-d8ef-4dc5-bc2a-5c251b09e844:bucket:potplants"
+     
+    cos = ibm_boto3.client("s3", ibm_api_key_id = COS_API_KEY_ID , ibm_service_instance_id = COS_INSTANCE_CRN , endpoint_url = COS_ENDPOINT, config = Config(signature_version='oauth'))
+    cos.upload_fileobj(image, Bucket = "potplants", Key = image.filename )
+    #uploadfileobj(file,bucket,objectname)
+    print("file uploaded")
+    return True
 
 @app.route('/logout')
 def logout():
