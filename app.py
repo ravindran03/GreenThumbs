@@ -108,9 +108,7 @@ def guides():
         plist.append(pnames[0])
         pnames=ibm_db.fetch_tuple(stmt)
         
-    print(plist)
-
-    
+    print(plist)    
     return render_template("guides.html",plist=plist)
 
 @app.route('/plants',methods=['GET','POST'])
@@ -123,19 +121,16 @@ def plants():
         filename=pimage.filename
         result=cosupload(pimage)
         # pimage.save(iname) #used to save the object locally
-        
-        
+                
         if result:
             query="insert into plant values(?,?,?,?)"
             stmt=ibm_db.prepare(conn,query)
             ibm_db.bind_param(stmt,1,pname)
             ibm_db.bind_param(stmt,2,pid)
             ibm_db.bind_param(stmt,3,price)
-            ibm_db.bind_param(stmt,4,filename)
-            
+            ibm_db.bind_param(stmt,4,filename)            
             print(type(pname))
-            ibm_db.execute(stmt)
-        
+            ibm_db.execute(stmt)        
             msg="new plant added succesfully"
             return msg
     return render_template("plants.html")
@@ -145,8 +140,7 @@ def plants():
 def cosupload(image):    
     COS_ENDPOINT = "https://s3.us-south.cloud-object-storage.appdomain.cloud"
     COS_API_KEY_ID = "t6P4mXYo0f_17TLletzv35JHnKmziHnzL7NNo57ARTbi"
-    COS_INSTANCE_CRN = "crn:v1:bluemix:public:cloud-object-storage:global:a/22999e2d442a4ba698829ce83834117e:79083486-d8ef-4dc5-bc2a-5c251b09e844:bucket:potplants"
-     
+    COS_INSTANCE_CRN = "crn:v1:bluemix:public:cloud-object-storage:global:a/22999e2d442a4ba698829ce83834117e:79083486-d8ef-4dc5-bc2a-5c251b09e844:bucket:potplants" 
     cos = ibm_boto3.client("s3", ibm_api_key_id = COS_API_KEY_ID , ibm_service_instance_id = COS_INSTANCE_CRN , endpoint_url = COS_ENDPOINT, config = Config(signature_version='oauth'))
     cos.upload_fileobj(image, Bucket = "potplants", Key = image.filename )
     #uploadfileobj(file,bucket,objectname)
@@ -167,7 +161,7 @@ def aboutplant(pname):
     ibm_db.execute(stmt)
     details=ibm_db.fetch_assoc(stmt)
     print(type(details))
-    return str(details)
+    return details
 
 
 #we still have to work on shop to display the plants for buying p.s=tablename =plant

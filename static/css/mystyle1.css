@@ -13,11 +13,15 @@
     background-color: rgb(80, 87, 151, 0.3);
     border-bottom-right-radius: 15px;
     border-bottom-left-radius: 15px;
-    box-shadow: 3px 8px 10px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 3px 4px 10px 2px rgba(0, 0, 0, 0.1);
 }
 .container a{
-    font-weight: bolder;
-    
+    font-weight: bolder;  
+    color: rgb(0, 0, 0);
+}
+.container a:hover{
+    font-weight: bolder;  
+    color: rgb(80, 87, 151);
 }
 #panel{
     top: 200px;
@@ -33,12 +37,13 @@
     position: absolute; 
     text-align: center;
     background-color: rgb(80, 87, 151, 0.3); 
-    box-shadow: 3px 8px 18px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 3px 8px 18px 4px rgba(0, 0, 0, 0.4);
     border-radius: 15px ;
 }
 .new{
     font-weight: bold;
     font-style: italic;
+    color: black;
      
 }
 .new a{
