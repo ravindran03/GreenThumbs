@@ -9,55 +9,74 @@
 </head>
 <body>
     <div>    
-        <img id="image" src="{{url_for('static',filename='img/pot.jpg')}}" >  
+        <img id="image" src="{{url_for('static',filename='img/pot.jpg')}}">  
         <div class="container">  
             <nav class="navbar navbar-expand-md navbar-light" id="navbar" >                    
                     <a class="navbar-brand" href="#">GREEN THUMBS</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
-                    </button>
+                    </button>{%if detpro%} 
                     <div class="collapse navbar-collapse" id="navbarText">
                         <ul class="navbar-nav mr-auto">
                         
                             <li class="nav-item">
                                 <a class="nav-link" href="/">HOME</a>
+                            </li>           
+                            <li class="nav-item">
+                                <a class="nav-link" href="/guides">GUIDES</a>
+                            </li>                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/profile" ><img style="width: 8%;" src="{{url_for('static',filename='img/profile.png')}}">{{detpro}}</a>
                             </li>
+                            <li class="nav-item" style="float: right;padding-left: 350px;">  
+                              <a class="nav-link" href="/logout">LOGOUT</a>
+                          </li>
+                        </ul>               
+                    </div> {%else%}      
+                    <div class="collapse navbar-collapse" id="navbarText">
+                        <ul class="navbar-nav mr-auto">
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" href="/">HOME</a>
+                            </li>           
                             <li class="nav-item">
                                 <a class="nav-link" href="/register">REGISTER</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/login">LOGIN</a>
+                            </li>  
+                            <li class="nav-item">
+                                <a class="nav-link" href="/guides">GUIDES</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/plants">PLANTS</a>
-                            </li>
+                                <a class="nav-link" href="/adminlogin">SHOP</a>
+                            </li>   
                             <li class="nav-item">
-                                <a class="nav-link" href="">SHOP</a>
-                            </li>
+                                <a class="nav-link" href="#">PLANT</a>
+                            </li>                     
                             <li class="nav-item">
-                                <a class="nav-link" href="/profile"><img style="width: 8%;" src="{{url_for('static',filename='img/profile.png')}}">PROFILE</a>
-                            </li>
+                                <a class="nav-link" href="/profile" ><img style="width: 8%;" src="{{url_for('static',filename='img/profile.png')}}">PROFILE</a>
+                            </li>    
+                                    
                         </ul>               
-                    </div>                
+                    </div>      {%endif%}             
+                                          
+                                           
+
             </nav>
         </div>
-    </div>
-    <div id="panel" style="background-color: rgb(80, 87, 151, 0.2);">
-        <div >
-            <div class="new" >    
-                <form action="/plants" method="post" enctype="multipart/form-data">
-                    <label for="pname">Plant name</label> <br>
-                    <input type="text" name="pname" id="pname" required> <br>
-                    <label for="pid">Plant ID</label> <br>
-                    <input type="text" name="pid" id="pid" required> <br>
-                    <label for="price">Price</label> <br>
-                    <input type="text" name="price" id="price" required> <br>
-                    <label for="pimage">Plant Image</label> <br>
-                    <input type="file" name="pimage" id="pimage" required> <br>                    
-                    <input type="submit" value="Add Plant" class="btn btn-primary"> <br>
-                </form>    
-            </div>
-        </div>                    
-    </div> 
+        <div>
+             <div id="panel"><!--  card designning for plantguides -->
+                <div >
+                    <div class="new" >    
+                        <h1>clist te <br> palt <br> for <br> pot plants</h1>
+                        <p>wanna know more about your pot plants. try our service</p>
+                        <a href="/guides" >read more</a> <br><br>
+                    </div>
+                </div>                    
+            </div> 
+
+    </div><div class="variable"><h2>{{msg}}</h2></div>
+
 </body>
 </html>

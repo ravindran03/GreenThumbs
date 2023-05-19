@@ -15,39 +15,58 @@
                 <a class="navbar-brand" href="#">GREEN THUMBS</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
-                </button>
+                </button>{%if detpro%} 
                 <div class="collapse navbar-collapse" id="navbarText">
                     <ul class="navbar-nav mr-auto">
                     
                         <li class="nav-item">
                             <a class="nav-link" href="/">HOME</a>
-                        </li>           {%if visibility=='visible'%} 
-                        <li class="nav-item" style="visibility: {{visibility}};">
-                            <a class="nav-link" href="/register">REGISTER</a>
-                        </li>
-                        <li class="nav-item" style="visibility: {{visibility}};">
-                            <a class="nav-link" href="/login">LOGIN</a>
-                        </li>   {%endif%}
+                        </li>           
                         <li class="nav-item">
                             <a class="nav-link" href="/guides">GUIDES</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">SHOP</a>
+                            <a class="nav-link" href="/plants">PLANT</a>
                         </li>                        
                         <li class="nav-item">
-                            <a class="nav-link" href="/profile"><img style="width: 8%;" src="{{url_for('static',filename='img/profile.png')}}">{{user}}</a>
+                            <a class="nav-link" href="/profile" ><img style="width: 8%;" src="{{url_for('static',filename='img/profile.png')}}">{{detpro}}</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" style="float: right;padding-left: 400px;">  
                           <a class="nav-link" href="/logout">LOGOUT</a>
                       </li>
                     </ul>               
-                </div>                
+                </div> {%else%}      
+                <div class="collapse navbar-collapse" id="navbarText">
+                    <ul class="navbar-nav mr-auto">
+                    
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">HOME</a>
+                        </li>           
+                        <li class="nav-item">
+                            <a class="nav-link" href="/register">REGISTER</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">LOGIN</a>
+                        </li>  
+                        <li class="nav-item">
+                            <a class="nav-link" href="/guides">GUIDES</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/shop">SHOP</a>
+                        </li>                        
+                        <li class="nav-item">
+                            <a class="nav-link" href="/profile" ><img style="width: 8%;" src="{{url_for('static',filename='img/profile.png')}}">PROFILE</a>
+                        </li>    
+                                
+                    </ul>               
+                </div>      {%endif%}    
         </nav>
     </div>
     </div>
     <div class="variable">
-        <h2>{{msg}}</h2>
+        <h2> {{msg}}</h2>
     </div>
+    
 
 </body>
 </html>

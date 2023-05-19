@@ -1,0 +1,4 @@
+flask
+ibm-db
+ibm-cos-sdk
+boto3

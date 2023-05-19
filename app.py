@@ -12,7 +12,11 @@ app.secret_key = "forreal"
 
 @app.route('/')
 def home():
-    return render_template('homepage.html')
+    user=session.get('user')
+    if user:
+        return render_template('homepage.html',detpro=user)
+    else:
+        return render_template('homepage.html')
 
 
 @app.route('/register' , methods=["GET","POST"])
@@ -78,6 +82,7 @@ def login(msg=""):
             ibm_db.bind_param(stmt,1,user)           
             ibm_db.execute(stmt)
             details=ibm_db.fetch_assoc(stmt)
+            
             if details:
                 msg="username and password didn't match"
             else:
@@ -87,9 +92,10 @@ def login(msg=""):
 
 @app.route('/profile')
 def profile():
-    if session['user']:
+    user=session.get('user')
+    if user:
         msg="welcome"+session['user']
-        return render_template('profile.html',user=session['user'],msg=msg,visibility='hidden')
+        return render_template('profile.html',msg=msg,detpro=user)
     else:
         return render_template('profile.html',msg="login to view your profile")
     
@@ -107,12 +113,47 @@ def guides():
     while pnames:
         plist.append(pnames[0])
         pnames=ibm_db.fetch_tuple(stmt)
-        
-    print(plist)    
-    return render_template("guides.html",plist=plist)
+    user=session.get('user')
+    if user:
+        return render_template('guides.html',plist=plist,detpro=user)
+    else:    
+        print(plist)    
+        return render_template("guides.html",plist=plist)
 
-@app.route('/plants',methods=['GET','POST'])
-def plants():
+@app.route('/guides/<pname>')
+def aboutplant(pname):
+    query="select * from guide where pname=?"
+    stmt=ibm_db.prepare(conn,query)
+    ibm_db.bind_param(stmt,1,pname)
+    ibm_db.execute(stmt)
+    details=ibm_db.fetch_assoc(stmt)
+    print(type(details))
+    return details
+
+@app.route('/adminlogin',methods=['POST','GET'])
+def adminlogin():
+    if request.method == 'POST':
+        user = request.form['user_name']
+        pw=request.form["pass_word"]
+        list=[user,pw]
+        print(list)
+        
+        query="select * from admin where username= ? and password= ?"
+        stmt=ibm_db.prepare(conn,query)
+        ibm_db.bind_param(stmt,1,user)
+        ibm_db.bind_param(stmt,2,pw)
+        ibm_db.execute(stmt)
+        details=ibm_db.fetch_assoc(stmt)
+        if details:
+            session['user']=details['USERNAME']
+            # session['user']=details['USERNAME']
+            return redirect('/shop')
+    return render_template('adminlogin.html')
+    
+
+
+@app.route('/shop',methods=['GET','POST'])
+def shop():
     if request.method=='POST':
         pname=request.form['pname']
         pid=request.form['pid']
@@ -133,7 +174,8 @@ def plants():
             ibm_db.execute(stmt)        
             msg="new plant added succesfully"
             return msg
-    return render_template("plants.html")
+    user=session.get('user')
+    return render_template("shop.html",detpro=user)
 
 
 #cloud object storage
@@ -143,7 +185,7 @@ def cosupload(image):
     COS_INSTANCE_CRN = "crn:v1:bluemix:public:cloud-object-storage:global:a/22999e2d442a4ba698829ce83834117e:79083486-d8ef-4dc5-bc2a-5c251b09e844:bucket:potplants" 
     cos = ibm_boto3.client("s3", ibm_api_key_id = COS_API_KEY_ID , ibm_service_instance_id = COS_INSTANCE_CRN , endpoint_url = COS_ENDPOINT, config = Config(signature_version='oauth'))
     cos.upload_fileobj(image, Bucket = "potplants", Key = image.filename )
-    #uploadfileobj(file,bucket,objectname)
+    #upload_fileobj(file,bucket,objectname)
     print("file uploaded")
     return True
 
@@ -153,19 +195,17 @@ def logout():
     # flash="logged out successfully"
     return redirect('/')
 
-@app.route('/guides/<pname>')
-def aboutplant(pname):
-    query="select * from guide where pname=?"
-    stmt=ibm_db.prepare(conn,query)
-    ibm_db.bind_param(stmt,1,pname)
-    ibm_db.execute(stmt)
-    details=ibm_db.fetch_assoc(stmt)
-    print(type(details))
-    return details
 
 
-#we still have to work on shop to display the plants for buying p.s=tablename =plant
 
+# we still have to work on shop to display the plants for buying p.s=tablename =plant
+@app.route('/plants')
+def plants():
+    user=session.get('user')
+    if user:
+        return render_template('profile.html',msg='this tis tthe list of palnts that we provide guide for   ',detpro=user)
+    else:
+        return render_template('plants.html')
 
 if __name__ == "__main__" :
     app.run(debug = True)
