@@ -94,8 +94,14 @@ def login(msg=""):
 def profile():
     user=session.get('user')
     if user:
+        query= "select * from registeration where username= ?"         
+        stmt = ibm_db.prepare(conn,query)
+        ibm_db.bind_param(stmt,1,user)
+        ibm_db.execute(stmt) 
+        details=ibm_db.fetch_assoc(stmt)
+        print(details)
         msg="welcome"+session['user']
-        return render_template('profile.html',msg=msg,detpro=user)
+        return render_template('profile.html',msg=msg,detpro=user,details=details)
     else:
         return render_template('profile.html',msg="login to view your profile")
     
@@ -170,12 +176,15 @@ def shop():
             ibm_db.bind_param(stmt,2,pid)
             ibm_db.bind_param(stmt,3,price)
             ibm_db.bind_param(stmt,4,filename)            
-            print(type(pname))
+            # print(type(pname))
             ibm_db.execute(stmt)        
-            msg="new plant added succesfully"
+            msg='''<h2>new plant added succesfully<h2><p>to add another plant <a href="/shop" >go to shop</a></p><p>to view added plant <a href="/plants" >go to plants</a></p>'''
             return msg
     user=session.get('user')
-    return render_template("shop.html",detpro=user)
+    if user:
+        return render_template("shop.html",detpro=user)
+    else:
+        return redirect('/adminlogin')
 
 
 #cloud object storage
@@ -197,15 +206,48 @@ def logout():
 
 
 
-
-# we still have to work on shop to display the plants for buying p.s=tablename =plant
 @app.route('/plants')
 def plants():
     user=session.get('user')
+
+    plants=[]
+    query="select * from plant "
+    stmt=ibm_db.prepare(conn,query)
+    ibm_db.execute(stmt)
+    details=ibm_db.fetch_assoc(stmt)    
+    while details:
+        plants.append(details)
+        details=ibm_db.fetch_assoc(stmt)
+    # for row in plants:
+    #     list=row
+    # print(list['PNAME'])
+    # print(plants)
+    
+    
+   
     if user:
-        return render_template('profile.html',msg='this tis tthe list of palnts that we provide guide for   ',detpro=user)
-    else:
-        return render_template('plants.html')
+        return render_template('plants.html',detpro=user,list=plants)
+    
+    return render_template('plants.html',list=plants)
+
+
+@app.route('/buy',methods=['POST','GET'])
+def buy():
+    user=session.get('user')
+    if user:
+        return "you are enrolled"
+    else :
+        return '''<h2>login to enroll <a href="/login" >login here</a><h2>'''
+
+
+
+
+    # username=session['user']
+    # query = "update booked set pname=? where username=?"
+    # stmt=ibm_db.prepare(conn,query)
+    # ibm_db.bind_param(stmt,1,username)            
+    #         # print(type(pname))
+    # ibm_db.execute(stmt)        
 
 if __name__ == "__main__" :
     app.run(debug = True)

@@ -65,3 +65,18 @@
     color: rgb(53, 168, 0);
 }
 
+.detail li{
+    font-weight: bolder;
+    list-style-type: none;
+}
+.card a {
+    color: rgb(0, 0, 0);
+    background-color: rgb(235, 154, 255, 0.4);
+    padding: 10px 20px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 50px;
+    text-decoration: none;
+    margin-left: 50px;
+    margin-top: 30px;
+}
