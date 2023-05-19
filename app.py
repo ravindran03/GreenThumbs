@@ -109,10 +109,11 @@ def profile():
 def guides():
     if request.method=='POST':
         pname=request.form['pname']
+        print(pname)
         return redirect(url_for('aboutplant',pname=pname))
     
     plist=[]
-    query="select pname from plant"     #guide table
+    query="select pname from guide"     #guide table
     stmt=ibm_db.prepare(conn,query)
     ibm_db.execute(stmt)
     pnames=ibm_db.fetch_tuple(stmt)
@@ -133,7 +134,7 @@ def aboutplant(pname):
     ibm_db.bind_param(stmt,1,pname)
     ibm_db.execute(stmt)
     details=ibm_db.fetch_assoc(stmt)
-    print(type(details))
+    print(details)
     return details
 
 @app.route('/adminlogin',methods=['POST','GET'])
@@ -234,20 +235,27 @@ def plants():
 @app.route('/buy',methods=['POST','GET'])
 def buy():
     user=session.get('user')
-    if user:
-        return "you are enrolled"
+    if user and request.method == 'POST':
+       
+        pname = request.form['pname']
+        pid = request.form['pid']
+        list=[pname,pid]
+        print(list)
+        query = "insert into enroll values(?,?,?)"
+        stmt=ibm_db.prepare(conn,query)
+        ibm_db.bind_param(stmt,1,user)   
+        ibm_db.bind_param(stmt,2,pid)
+        ibm_db.bind_param(stmt,3,pname)                   
+        ibm_db.execute(stmt)        
+        return "<h2>you are enrolled<h2>"
     else :
         return '''<h2>login to enroll <a href="/login" >login here</a><h2>'''
+    
+        
 
 
 
-
-    # username=session['user']
-    # query = "update booked set pname=? where username=?"
-    # stmt=ibm_db.prepare(conn,query)
-    # ibm_db.bind_param(stmt,1,username)            
-    #         # print(type(pname))
-    # ibm_db.execute(stmt)        
+    
 
 if __name__ == "__main__" :
     app.run(debug = True)
