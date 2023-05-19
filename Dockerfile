@@ -1,11 +1,11 @@
 FROM python:3.11.3
 
-WORKDIR /project
+WORKDIR /greenthumbs
 
-COPY . /project
+COPY . /greenthumbs
 
-RUN python3 -m pip install -r /project/requirements.txt
+RUN python3 -m pip install -r /greenthumbs/requirements.txt
 
 EXPOSE 5000
 
-CMD [ "python3" ,  "/project/app.py" ]
+CMD [ "python3" ,  "/greenthumbs/app.py" ]

@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request,redirect,session,url_for
+from flask import Flask,render_template,request,redirect,session,url_for,render_template_string
 import ibm_db
 import ibm_boto3
 from ibm_botocore.client import ClientError,Config
@@ -57,7 +57,6 @@ def register(msg=""):
     return render_template('register.html',msg=msg)
 
 
-
 @app.route('/login' , methods=["GET","POST"])
 def login(msg=""):
     if request.method == 'POST':
@@ -101,10 +100,25 @@ def profile():
         details=ibm_db.fetch_assoc(stmt)
         print(details)
         msg="welcome"+session['user']
-        return render_template('profile.html',msg=msg,detpro=user,details=details)
+
+        list=[]
+        query= "select * from enroll where username= ?"         
+        stmt = ibm_db.prepare(conn,query)
+        ibm_db.bind_param(stmt,1,user)
+        ibm_db.execute(stmt) 
+        details1=ibm_db.fetch_assoc(stmt)
+        print(details1)
+        while details1:
+            list.append(details1)
+            details1=ibm_db.fetch_assoc(stmt)
+            if not details:
+                break
+        msg="welcome"+session['user']
+        return render_template('profile.html',msg=msg,detpro=user,details=details,details1=list)
     else:
         return render_template('profile.html',msg="login to view your profile")
-    
+
+   
 @app.route('/guides',methods=['GET','POST'])
 def guides():
     if request.method=='POST':
@@ -113,7 +127,7 @@ def guides():
         return redirect(url_for('aboutplant',pname=pname))
     
     plist=[]
-    query="select pname from guide"     #guide table
+    query="select pname from guide"     
     stmt=ibm_db.prepare(conn,query)
     ibm_db.execute(stmt)
     pnames=ibm_db.fetch_tuple(stmt)
@@ -127,6 +141,7 @@ def guides():
         print(plist)    
         return render_template("guides.html",plist=plist)
 
+
 @app.route('/guides/<pname>')
 def aboutplant(pname):
     query="select * from guide where pname=?"
@@ -134,8 +149,24 @@ def aboutplant(pname):
     ibm_db.bind_param(stmt,1,pname)
     ibm_db.execute(stmt)
     details=ibm_db.fetch_assoc(stmt)
-    print(details)
-    return details
+
+    variable="""<div class="plant-info">
+        <h1>Information</h1>
+        <img src="https://potplants.s3.us-south.cloud-object-storage.appdomain.cloud/{{details['PMAGE']}}" alt="{{details['PMAGE']}}">
+        <h2>Scientific Name:</h2>
+        <p>{{ details['SCIENTIFIC_NAME'] }}</p>
+        <h2>Common Name:</h2>
+        <p>{{ details['PNAME'] }}</p>
+        <h2>Preferred Light:</h2>
+        <p>{{ details['PREFERRED_LIGHT'] }}</p>
+        <h2>Preferred Soil:</h2>
+        <p>{{ details['PREFERRED_SOIL'] }}</p>
+        <h2>Watering Needs:</h2>
+        <p>{{ details['WATERING_NEEDS'] }}</p>
+    </div>"""
+    
+    return render_template_string(variable,details=details)
+
 
 @app.route('/adminlogin',methods=['POST','GET'])
 def adminlogin():
@@ -157,7 +188,6 @@ def adminlogin():
             return redirect('/shop')
     return render_template('adminlogin.html')
     
-
 
 @app.route('/shop',methods=['GET','POST'])
 def shop():
@@ -199,12 +229,6 @@ def cosupload(image):
     print("file uploaded")
     return True
 
-@app.route('/logout')
-def logout():
-    session.pop('user',None)
-    # flash="logged out successfully"
-    return redirect('/')
-
 
 
 @app.route('/plants')
@@ -219,13 +243,7 @@ def plants():
     while details:
         plants.append(details)
         details=ibm_db.fetch_assoc(stmt)
-    # for row in plants:
-    #     list=row
-    # print(list['PNAME'])
-    # print(plants)
     
-    
-   
     if user:
         return render_template('plants.html',detpro=user,list=plants)
     
@@ -252,7 +270,11 @@ def buy():
         return '''<h2>login to enroll <a href="/login" >login here</a><h2>'''
     
         
-
+@app.route('/logout')
+def logout():
+    session.pop('user',None)
+    # flash="logged out successfully"
+    return redirect('/')
 
 
     

@@ -38,14 +38,16 @@
                 </div>
             </nav>
             <div>
-                <div id="panel">
+                <div id="panel" style="padding: 30px 30px 30px 30px;">
                     <div >
                         <div class="new" >    
                             <div class="" style="">    
                                 <ul style="list-style-type: none;">
                                     <li type="">NAME    :   {{details['USERNAME']}}</li>
                                     <li type="">EMAIL   :   {{details['EMAILID']}}</li>
-                                    <li type="">status  :   AVAILABLE</li>
+                                    <li type="">STATUS  :   AVAILABLE</li> {%for detail in details1%}
+                                    <li type="">ENROLLED PLANTS ID   :   {{detail['PID']}}</li>
+                                    <li type="">ENROLLED PLANTS NAME    :   {{detail['PNAME']}}</li> {%endfor%}
                                 </ul>
                             </div>
                         </div>
@@ -70,6 +72,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/guides">GUIDES</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/plants">PLANT</a>
+                        </li>   
                         <li class="nav-item">
                             <a class="nav-link" href="/shop">SHOP</a>
                         </li>                        

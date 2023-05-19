@@ -16,6 +16,6 @@ spec:
    spec:
      containers:
      - name: greenthumbs
-       image: icr.io/greenthumbs/project:1.0
+       image: icr.io/greenthumbs/greenthumbs:1.0
        ports:
        - containerPort: 5000
