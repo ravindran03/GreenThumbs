@@ -150,7 +150,7 @@ def aboutplant(pname):
     ibm_db.execute(stmt)
     details=ibm_db.fetch_assoc(stmt)
 
-    variable="""<div class="plant-info">
+    variable="""<center><div class="plant-info">
         <h1>Information</h1>
         <img src="https://potplants.s3.us-south.cloud-object-storage.appdomain.cloud/{{details['PMAGE']}}" alt="{{details['PMAGE']}}">
         <h2>Scientific Name:</h2>
@@ -163,7 +163,7 @@ def aboutplant(pname):
         <p>{{ details['PREFERRED_SOIL'] }}</p>
         <h2>Watering Needs:</h2>
         <p>{{ details['WATERING_NEEDS'] }}</p>
-    </div>"""
+    </div></center>"""
     
     return render_template_string(variable,details=details)
 
@@ -265,9 +265,9 @@ def buy():
         ibm_db.bind_param(stmt,2,pid)
         ibm_db.bind_param(stmt,3,pname)                   
         ibm_db.execute(stmt)        
-        return '''<h2>you are enrolled<h2><p>go to your <a  href="/profile">profile</a>to view details of the enrolled plants</p>we will notify you when the enrolled guide is available<p>to further enroll go <a  href="/plants">back</a></p>'''
+        return '''<center><h2>you are enrolled<h2><p>go to your <a  href="/profile">profile</a>to view details of the enrolled plants</p>we will notify you when the enrolled guide is available<p>to further enroll go <a  href="/plants">back</a></p><center>'''
     else :
-        return '''<h2>login to enroll <a href="/login" >login here</a><h2>'''
+        return '''<center><h2>login to enroll <a href="/login" >login here</a><h2><center>'''
     
         
 @app.route('/logout')
