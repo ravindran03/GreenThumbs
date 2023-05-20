@@ -80,6 +80,18 @@
             </div> 
 
     </div><div class="variable"><h2>{{msg}}</h2></div>
-
+<script>
+  window.watsonAssistantChatOptions = {
+    integrationID: "54f992ef-9f10-4d53-9f58-8ee931ef18b2", // The ID of this integration.
+    region: "us-south", // The region your integration is hosted in.
+    serviceInstanceID: "4ec025bb-bce8-4915-a93d-2b3a60ded510", // The ID of your service instance.
+    onLoad: function(instance) { instance.render(); }
+  };
+  setTimeout(function(){
+    const t=document.createElement('script');
+    t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
+    document.head.appendChild(t);
+  });
+</script>
 </body>
 </html>

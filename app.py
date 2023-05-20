@@ -265,7 +265,7 @@ def buy():
         ibm_db.bind_param(stmt,2,pid)
         ibm_db.bind_param(stmt,3,pname)                   
         ibm_db.execute(stmt)        
-        return "<h2>you are enrolled<h2>"
+        return '''<h2>you are enrolled<h2><p>go to your <a  href="/profile">profile</a>to view details of the enrolled plants</p>we will notify you when the enrolled guide is available<p>to further enroll go <a  href="/plants">back</a></p>'''
     else :
         return '''<h2>login to enroll <a href="/login" >login here</a><h2>'''
     
