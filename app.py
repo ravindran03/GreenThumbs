@@ -4,7 +4,7 @@ import ibm_boto3
 from ibm_botocore.client import ClientError,Config
 
 
-conn =  ibm_db.connect("database = bludb; hostname = 125f9f61-9715-46f9-9399-c8177b21803b.c1ogj3sd0tgtu0lqde00.databases.appdomain.cloud; port = 30426; uid = ksy13207; password = Z5tm8KPtdC4hpoaL; security = SSL; sslcertificate = DigiCertGlobalRootCA.crt", " ", " ")
+conn =  ibm_db.connect("database = ; hostname = ; port = ; uid = ; password = ; security = ; sslcertificate = ", " ", " ")
 print("connection done")
 
 app=Flask(__name__)
